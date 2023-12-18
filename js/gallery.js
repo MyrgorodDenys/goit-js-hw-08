@@ -64,59 +64,54 @@ const gallery = [
   },
 ];
 
-const ul = document.querySelector('.gallery');
-let string = '';
-gallery.forEach(elem => {
-  string += `<li class="gallery__item">
-    <a
-      class="gallery__link"
-      href="${elem.original}"
-    >
+const galleryContainer = document.querySelector('.gallery');
+let galleryItemsHTML = '';
+
+gallery.forEach(item => {
+  galleryItemsHTML += `<li class="gallery-item">
+    <a class="gallery-link" href="${item.original}">
       <img
-        class="gallery__image"
-        src="${elem.preview}"
-        data-source="${elem.original}"
-        alt="${elem.description}"
+        class="gallery-image"
+        src="${item.preview}"
+        data-source="${item.original}"
+        alt="${item.description}"
       />
-      <span class="gallery__icon">
-        <i class="material-icons">zoom_out_map</i>
-      </span>
     </a>
   </li>`;
 });
 
-ul.insertAdjacentHTML('afterbegin', string);
+galleryContainer.insertAdjacentHTML('afterbegin', galleryItemsHTML);
 
-const ulListner = document.querySelector('.js-gallery');
-const modalListner = document.querySelector('.lightbox');
-const modal = document.querySelector('.js-lightbox');
-const fullImg = document.querySelector('.lightbox__image');
+const galleryContainerListener = document.querySelector('.gallery');
+const lightboxListener = document.querySelector('.js-lightbox');
+const lightbox = document.querySelector('.js-lightbox');
+const lightboxImage = document.querySelector('.lightbox__image');
 
-function showModal(event) {
+function handleShowModal(event) {
   event.preventDefault();
-  if (event.target.nodeName != 'IMG') {
+  if (event.target.nodeName !== 'IMG') {
     return;
   }
-  modal.classList.add('is-open');
-  const bigImgTake = event.target.dataset.source;
-  const altTake = event.target.getAttribute('alt');
-  fullImg.setAttribute('src', `${bigImgTake}`);
-  fullImg.setAttribute('alt', `${altTake}`);
+  lightbox.classList.add('is-open');
+  const bigImgSource = event.target.dataset.source;
+  const altText = event.target.getAttribute('alt');
+  lightboxImage.setAttribute('src', `${bigImgSource}`);
+  lightboxImage.setAttribute('alt', `${altText}`);
 }
 
-function hideModal(event) {
+function handleHideModal(event) {
   if (
     event.target.dataset.action !== 'close-lightbox' &&
     event.target.nodeName !== 'I' &&
-    !event.target.classList.contains('lightbox__content') &&
+    event.target !== lightbox &&
     event.code !== 'Escape'
   ) {
     return;
   }
-  modal.classList.remove('is-open');
-  fullImg.setAttribute('src', '#');
+  lightbox.classList.remove('is-open');
+  lightboxImage.setAttribute('src', '#');
 }
 
-ulListner.addEventListener('click', showModal);
-document.addEventListener('click', hideModal);
-document.addEventListener('keyup', hideModal);
+galleryContainerListener.addEventListener('click', handleShowModal);
+document.addEventListener('click', handleHideModal);
+document.addEventListener('keyup', handleHideModal);
