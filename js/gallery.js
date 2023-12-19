@@ -83,35 +83,40 @@ gallery.forEach(item => {
 galleryContainer.insertAdjacentHTML('afterbegin', galleryItemsHTML);
 
 const galleryContainerListener = document.querySelector('.gallery');
-const lightboxListener = document.querySelector('.js-lightbox');
-const lightbox = document.querySelector('.js-lightbox');
-const lightboxImage = document.querySelector('.lightbox__image');
+const lightbox = basicLightbox.create(document.querySelector('.js-lightbox'), {
+  onShow: instance => {},
+  onClose: instance => {},
+});
 
 function handleShowModal(event) {
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') {
     return;
   }
-  lightbox.classList.add('is-open');
   const bigImgSource = event.target.dataset.source;
   const altText = event.target.getAttribute('alt');
-  lightboxImage.setAttribute('src', `${bigImgSource}`);
-  lightboxImage.setAttribute('alt', `${altText}`);
+  lightbox.element().querySelector('.lightbox__image').src = bigImgSource;
+  lightbox.element().querySelector('.lightbox__image').alt = altText;
+  lightbox.show();
 }
 
 function handleHideModal(event) {
   if (
     event.target.dataset.action !== 'close-lightbox' &&
     event.target.nodeName !== 'I' &&
-    event.target !== lightbox &&
+    event.target !== lightbox.element() &&
     event.code !== 'Escape'
   ) {
     return;
   }
-  lightbox.classList.remove('is-open');
-  lightboxImage.setAttribute('src', '#');
+  lightbox.close();
 }
 
 galleryContainerListener.addEventListener('click', handleShowModal);
 document.addEventListener('click', handleHideModal);
 document.addEventListener('keyup', handleHideModal);
+document.addEventListener('keydown', function (event) {
+  if (event.code === 'Escape') {
+    handleHideModal(event);
+  }
+});
