@@ -64,6 +64,63 @@ const gallery = [
   },
 ];
 
+// const galleryContainer = document.querySelector('.gallery');
+// let galleryItemsHTML = '';
+
+// gallery.forEach(item => {
+//   galleryItemsHTML += `<li class="gallery-item">
+//     <a class="gallery-link" href="${item.original}">
+//       <img
+//         class="gallery-image"
+//         src="${item.preview}"
+//         data-source="${item.original}"
+//         alt="${item.description}"
+//       />
+//     </a>
+//   </li>`;
+// });
+
+// galleryContainer.insertAdjacentHTML('afterbegin', galleryItemsHTML);
+
+// const galleryContainerListener = document.querySelector('.gallery');
+// const lightbox = basicLightbox.create(document.querySelector('.js-lightbox'), {
+//   onShow: instance => {},
+//   onClose: instance => {},
+// });
+
+// function handleShowModal(event) {
+//   event.preventDefault();
+//   if (event.target.nodeName !== 'IMG') {
+//     return;
+//   }
+//   const bigImgSource = event.target.dataset.source;
+//   const altText = event.target.getAttribute('alt');
+//   lightbox.element().querySelector('.lightbox__image').src = bigImgSource;
+//   lightbox.element().querySelector('.lightbox__image').alt = altText;
+//   lightbox.show();
+// }
+
+// function handleHideModal(event) {
+//   if (
+//     event.target.dataset.action !== 'close-lightbox' &&
+//     event.target.nodeName !== 'I' &&
+//     event.target !== lightbox.element() &&
+//     event.code !== 'Escape'
+//   ) {
+//     return;
+//   }
+//   lightbox.close();
+// }
+
+// galleryContainerListener.addEventListener('click', handleShowModal);
+// document.addEventListener('click', handleHideModal);
+// document.addEventListener('keyup', handleHideModal);
+// document.addEventListener('keydown', function (event) {
+//   if (event.code === 'Escape') {
+//     handleHideModal(event);
+//   }
+// });
+
 const galleryContainer = document.querySelector('.gallery');
 let galleryItemsHTML = '';
 
@@ -84,8 +141,12 @@ galleryContainer.insertAdjacentHTML('afterbegin', galleryItemsHTML);
 
 const galleryContainerListener = document.querySelector('.gallery');
 const lightbox = basicLightbox.create(document.querySelector('.js-lightbox'), {
-  onShow: instance => {},
-  onClose: instance => {},
+  onShow: instance => {
+    // Additional actions when the lightbox is displayed
+  },
+  onClose: instance => {
+    // Additional actions when the lightbox is closed
+  },
 });
 
 function handleShowModal(event) {
@@ -112,6 +173,7 @@ function handleHideModal(event) {
   lightbox.close();
 }
 
+// Change the event listener to target individual image links
 galleryContainerListener.addEventListener('click', handleShowModal);
 document.addEventListener('click', handleHideModal);
 document.addEventListener('keyup', handleHideModal);
