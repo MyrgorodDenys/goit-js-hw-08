@@ -80,13 +80,35 @@ gallery.forEach(item => {
   </li>`;
 });
 
-galleryContainer.insertAdjacentHTML('afterbegin', galleryItemsHTML);
+galleryContainer.innerHTML = galleryItemsHTML;
 
-const galleryContainerListener = document.querySelector('.gallery');
-const lightbox = basicLightbox.create(document.querySelector('.js-lightbox'), {
-  onShow: instance => {},
-  onClose: instance => {},
+const lightboxTemplate = document.createElement('div');
+lightboxTemplate.innerHTML = `
+  <div class="lightbox__overlay"></div>
+  <div class="lightbox__content">
+    <img class="lightbox__image" src="#" alt="alt" />
+  </div>
+  <button
+    type="button"
+    class="lightbox__button"
+    data-action="close-lightbox"
+  ></button>
+`;
+
+const lightbox = basicLightbox.create(lightboxTemplate, {
+  onShow: instance => {
+    document.addEventListener('keydown', handleKeyDown);
+  },
+  onClose: instance => {
+    document.removeEventListener('keydown', handleKeyDown);
+  },
 });
+
+function handleKeyDown(event) {
+  if (event.code === 'Escape') {
+    lightbox.close();
+  }
+}
 
 function handleShowModal(event) {
   event.preventDefault();
@@ -112,11 +134,5 @@ function handleHideModal(event) {
   lightbox.close();
 }
 
-galleryContainerListener.addEventListener('click', handleShowModal);
-document.addEventListener('click', handleHideModal);
-document.addEventListener('keyup', handleHideModal);
-document.addEventListener('keydown', function (event) {
-  if (event.code === 'Escape') {
-    handleHideModal(event);
-  }
-});
+galleryContainer.addEventListener('click', handleShowModal);
+lightbox.element().addEventListener('click', handleHideModal);
