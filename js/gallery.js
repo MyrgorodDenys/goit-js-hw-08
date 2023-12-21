@@ -95,6 +95,8 @@ lightboxTemplate.innerHTML = `
   ></button>
 `;
 
+document.body.appendChild(lightboxTemplate);
+
 const lightbox = basicLightbox.create(lightboxTemplate, {
   onShow: instance => {
     document.addEventListener('keydown', handleKeyDown);
@@ -122,17 +124,4 @@ function handleShowModal(event) {
   lightbox.show();
 }
 
-function handleHideModal(event) {
-  if (
-    event.target.dataset.action !== 'close-lightbox' &&
-    event.target.nodeName !== 'I' &&
-    event.target !== lightbox.element() &&
-    event.code !== 'Escape'
-  ) {
-    return;
-  }
-  lightbox.close();
-}
-
 galleryContainer.addEventListener('click', handleShowModal);
-lightbox.element().addEventListener('click', handleHideModal);
