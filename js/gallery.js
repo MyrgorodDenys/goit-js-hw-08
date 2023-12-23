@@ -64,11 +64,12 @@ const gallery = [
   },
 ];
 
-const galleryContainer = document.querySelector('.gallery');
-let galleryItemsHTML = '';
+const divRef = document.querySelector('.gallery');
 
-gallery.forEach(item => {
-  galleryItemsHTML += `<li class="gallery-item">
+function createGallaryMarcup(items) {
+  return items
+    .map(
+      item => `<li class="gallery-item">
     <a class="gallery-link" href="${item.original}">
       <img
         class="gallery-image"
@@ -77,51 +78,41 @@ gallery.forEach(item => {
         alt="${item.description}"
       />
     </a>
-  </li>`;
-});
-
-galleryContainer.innerHTML = galleryItemsHTML;
-
-const lightboxTemplate = document.createElement('div');
-lightboxTemplate.innerHTML = `
-  <div class="lightbox__overlay"></div>
-  <div class="lightbox__content">
-    <img class="lightbox__image" src="#" alt="alt" />
-  </div>
-  <button
-    type="button"
-    class="lightbox__button"
-    data-action="close-lightbox"
-  ></button>
-`;
-
-document.body.appendChild(lightboxTemplate);
-
-const lightbox = basicLightbox.create(lightboxTemplate, {
-  onShow: instance => {
-    document.addEventListener('keydown', handleKeyDown);
-  },
-  onClose: instance => {
-    document.removeEventListener('keydown', handleKeyDown);
-  },
-});
-
-function handleKeyDown(event) {
-  if (event.code === 'Escape') {
-    lightbox.close();
-  }
+  </li>`
+    )
+    .join('');
 }
 
-function handleShowModal(event) {
-  event.preventDefault();
-  if (event.target.nodeName !== 'IMG') {
+const addGallaryMarcup = createGallaryMarcup(gallery);
+
+divRef.innerHTML = addGallaryMarcup;
+
+divRef.addEventListener('click', onImageClick);
+
+function blockStandartAction(evt) {
+  evt.preventDefault();
+}
+
+function onImageClick(evt) {
+  blockStandartAction(evt);
+
+  if (evt.target.nodeName !== 'IMG') {
     return;
   }
-  const bigImgSource = event.target.dataset.source;
-  const altText = event.target.getAttribute('alt');
-  lightbox.element().querySelector('.lightbox__image').src = bigImgSource;
-  lightbox.element().querySelector('.lightbox__image').alt = altText;
-  lightbox.show();
+
+  const instance = basicLightbox.create(`
+    <img src="${evt.target.dataset.source}" width="800" height="600">
+  `);
+
+  instance.show();
+
+  divRef.addEventListener('keydown', keyEvent => {
+    if (keyEvent.code === 'Escape') {
+      instance.close();
+    }
+  });
 }
 
-galleryContainer.addEventListener('click', handleShowModal);
+function blockStandartAction(evt) {
+  evt.preventDefault();
+}
