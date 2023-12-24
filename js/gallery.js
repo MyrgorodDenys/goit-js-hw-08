@@ -101,18 +101,20 @@ function onImageClick(evt) {
   }
 
   const instance = basicLightbox.create(`
-    <img src="${evt.target.dataset.source}" width="800" height="600">
+    <img class="modal-img" src="${evt.target.dataset.source}" width="1112" height="640">
   `);
 
-  instance.show();
+  instance.show(() => {
+    document.addEventListener('keydown', onKeydown);
+  });
 
-  divRef.addEventListener('keydown', keyEvent => {
+  instance.onClose(() => {
+    document.removeEventListener('keydown', onKeydown);
+  });
+
+  function onKeydown(keyEvent) {
     if (keyEvent.code === 'Escape') {
       instance.close();
     }
-  });
-}
-
-function blockStandartAction(evt) {
-  evt.preventDefault();
+  }
 }

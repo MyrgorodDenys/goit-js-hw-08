@@ -24,12 +24,10 @@ body {
   display: grid;
   width: 1440px;
   height: 696px;
-  /* width: 1200px; */
   grid-template-columns: repeat(3, minmax(380px, 1fr));
   grid-auto-rows: 240px;
   grid-gap: 12px;
   padding: 24px 156px;
-  /* padding: 0; */
   list-style: none;
   margin-left: auto;
   margin-right: auto;
